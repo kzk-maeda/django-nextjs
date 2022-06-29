@@ -30,6 +30,7 @@ def newJob(request: Request) -> Response:
 
   job = Job.objects.create(**data)
   serializer = JobSerializer(job, many=False)
+  serializer.create()
 
   return Response(serializer.data)
 
@@ -53,5 +54,6 @@ def updateJob(request: Request, pk: int) -> Response:
   job.save()
 
   serializer = JobSerializer(job, many=False)
+  serializer.update()
 
   return Response(serializer.data)

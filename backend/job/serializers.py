@@ -7,3 +7,9 @@ class JobSerializer(serializers.ModelSerializer):
   class Meta:
     model = Job
     fields = '__all__'
+  
+  def create():
+    pass
+
+  def update():
+    pass
