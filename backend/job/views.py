@@ -1,8 +1,10 @@
+import imp
 from urllib import response
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Job
 from .serializers import JobSerializer
@@ -57,3 +59,11 @@ def updateJob(request: Request, pk: int) -> Response:
   serializer.update()
 
   return Response(serializer.data)
+
+@api_view(['DELETE'])
+def deleteJob(request: Request, pk: int) -> Response:
+  job = get_object_or_404(Job, id=pk)
+
+  job.delete()
+
+  return Response({ 'message': 'Job is Deleted.' }, status=status.HTTP_200_OK)
