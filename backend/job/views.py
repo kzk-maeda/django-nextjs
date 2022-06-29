@@ -29,9 +29,9 @@ def getJob(request: Request, pk: int) -> Response:
 def newJob(request: Request) -> Response:
   data = request.data
 
-  job = Job.objects.create(**data)
-  serializer = JobSerializer(job, many=False)
-  serializer.create()
+  serializer = JobSerializer(data=data)
+  if serializer.is_valid():
+    job = serializer.save()
 
   return Response(serializer.data)
 
@@ -39,23 +39,11 @@ def newJob(request: Request) -> Response:
 @api_view(['PUT'])
 def updateJob(request: Request, pk: int) -> Response:
   job = get_object_or_404(Job, id=pk)
+  data = request.data
 
-  job.title = request.data['title']
-  job.description = request.data['description']
-  job.email = request.data['email']
-  job.address = request.data['address']
-  job.jobType = request.data['jobType']
-  job.education = request.data['education']
-  job.industry = request.data['industry']
-  job.experience = request.data['experience']
-  job.salary = request.data['salary']
-  job.positions = request.data['positions']
-  job.company = request.data['company']
-
-  job.save()
-
-  serializer = JobSerializer(job, many=False)
-  serializer.update()
+  serializer = JobSerializer(job, data=data)
+  if serializer.is_valid():
+    serializer.save()
 
   return Response(serializer.data)
 
