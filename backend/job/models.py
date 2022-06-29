@@ -76,6 +76,8 @@ class Job(models.Model):
   def save(self, *args, **kwargs):
     '''
     Overwrite model.save method to insert geo code record
+    using MapQuest
+    https://developer.mapquest.com/user/me/profile
     '''
     g = geocoder.mapquest(self.address, key=os.environ.get('GEOCODER_API'))
     
