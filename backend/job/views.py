@@ -53,3 +53,5 @@ def updateJob(request: Request, pk: int) -> Response:
   job.save()
 
   serializer = JobSerializer(job, many=False)
+
+  return Response(serializer.data)
