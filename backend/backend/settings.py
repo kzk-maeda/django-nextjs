@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from datetime import timedelta
+from distutils.debug import DEBUG
 import os
 import dotenv
 from pathlib import Path
@@ -28,9 +29,10 @@ dotenv.read_dotenv()
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') == 'True'
+# DEBUG = os.environ.get('DEBUG') == 'True'
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
