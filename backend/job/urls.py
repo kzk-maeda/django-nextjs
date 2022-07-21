@@ -1,4 +1,3 @@
-import imp
 from django.urls import path
 from . import views
 
@@ -10,4 +9,8 @@ urlpatterns = [
   path('jobs/<str:pk>/delete/', views.deleteJob, name='delete_job'),
   path('stats/<str:topic>/', views.getTopicStats, name='get_topic_stats'),
   path('jobs/<str:pk>/apply/', views.applyToJob, name='apply_to_job'),
+  path('me/jobs/applied/', views.getCurrentUserAppliedJobs, name='get_current_user_applied_jobs'),
+  path('me/jobs/', views.getCurrentUserJobs, name='get_current_user_jobs'),
+  path('jobs/<str:pk>/check/', views.isApplied, name='is applied'),
+  path('jobs/<str:pk>/candidates/', views.getCandidatesApplied, name='get_candidates_applied'),
 ]

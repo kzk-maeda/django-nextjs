@@ -9,7 +9,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from .models import CandidatesApplied, Job
-from .serializers import JobSerializer
+from .serializers import CandidateAppliedSerializer, JobSerializer
 from .filters import JobsFilter
 
 # Create your views here.
@@ -132,3 +132,53 @@ def applyToJob(request, pk):
   },
   status=status.HTTP_200_OK
   )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCurrentUserAppliedJobs(request):
+  args = { 'user_id': request.user.id }
+  jobs = CandidatesApplied.objects.filter(**args)
+
+  serializer = CandidateAppliedSerializer(jobs, many=True)
+
+  return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def isApplied(request, pk):
+
+  user = request.user
+  job = get_object_or_404(Job, id=pk)
+
+  applied = job.candidatesapplied_set.filter(user=user).exists()
+
+  return Response(applied)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCurrentUserJobs(request):
+
+  args = { 'user': request.user.id }
+  jobs = Job.objects.filter(**args)
+  serializer = JobSerializer(jobs, many=True)
+
+  return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCandidatesApplied(request, pk):
+
+  user = request.user
+  job = get_object_or_404(Job, id=pk)
+
+  if job.user != user:
+    return Response( {'error': 'You can not access this job.'}, status=status.HTTP_400_BAD_REQUEST )
+  
+  candidates = job.candidatesapplied_set.all()
+  serializer = CandidateAppliedSerializer(candidates, many=True)
+
+  return Response(serializer.data)
