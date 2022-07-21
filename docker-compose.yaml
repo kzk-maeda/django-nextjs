@@ -12,8 +12,10 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   
-  web:
-    build: .
+  api:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
     env_file:
       - backend/backend/.env
     command: python3 /app/manage.py runserver 0.0.0.0:8000
@@ -23,6 +25,17 @@ services:
       - "8000:8000"
     depends_on:
       - db
+  
+  front:
+    build: 
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    tty: true
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: sh -c "npm run dev"
 
 volumes:
   postgres_data:
