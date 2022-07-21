@@ -1,0 +1,15 @@
+version: 3
+
+vars:
+  web: django-nextjs_web_1
+
+tasks:
+  makemigrations:
+    - docker exec -it {{.web}} python3 /app/manage.py makemigrations
+  
+  migrate:
+    - docker exec -it {{.web}} python3 /app/manage.py migrate
+  
+  manage:
+    - docker exec -it {{.web}} python3 /app/manage.py {{.CLI_ARGS}}
+    

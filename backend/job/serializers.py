@@ -1,7 +1,7 @@
 from dataclasses import fields
 from statistics import mode
 from rest_framework import serializers
-from .models import Job
+from .models import CandidatesApplied, Job
 
 class JobSerializer(serializers.ModelSerializer):
   class Meta:
@@ -32,3 +32,11 @@ class JobSerializer(serializers.ModelSerializer):
 
     job.save()
     return job
+
+
+class CandidateAppliedSerializer(serializers.ModelSerializer):
+
+  job = JobSerializer()
+  class Meta:
+    model = CandidatesApplied
+    fields = ('user', 'resume', 'appliedAt', 'job')
