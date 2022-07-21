@@ -12,4 +12,6 @@ tasks:
   
   manage:
     - docker exec -it {{.web}} python3 /app/manage.py {{.CLI_ARGS}}
-    
+
+  generate_openapi_schema:
+    - docker exec -it {{.web}} python3 /app/manage.py generateschema --title="Jobbee API" --description="OpenAPI document" --urlconf='backend.urls' > openapi-schema.yaml 

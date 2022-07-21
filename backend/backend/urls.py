@@ -15,9 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.schemas import get_schema_view
+from rest_framework import permissions
+from rest_framework.renderers import OpenAPIRenderer
+from django.views.generic.base import TemplateView
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenVerifyView
 
+def openapi_schema_path():
+    view = get_schema_view(
+        title="Jobbee API",
+        description="[DFR標準] OpenAPI document",
+        version="1.0.0",
+        public=True,
+        urlconf='backend.urls',
+        renderer_classes=[OpenAPIRenderer],
+        permission_classes=(permissions.AllowAny,),
+    )
+    
+    return view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,7 +41,9 @@ urlpatterns = [
     path('api/', include('account.urls')),
     path('api/token/', TokenObtainPairView.as_view()),
     path('api/token/verify', TokenVerifyView.as_view()),
+    path('openapi-schema/', openapi_schema_path(), name='openapi-schema'),
 ]
 
 handler404 = 'utils.error_views.handler404'
 handler500 = 'utils.error_views.handler500'
+
