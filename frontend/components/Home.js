@@ -2,7 +2,9 @@ import React from "react";
 import Link from "next/link";
 import JobItem from "./job/JobItem";
 
-const Home = () => {
+const Home = ({ data }) => {
+  const { jobs, count, resPerPage } = data;
+
   return (
     <>
       <div className="container container-fluid">
@@ -21,8 +23,7 @@ const Home = () => {
                 <Link href="/search">Go to Search</Link>
               </div>
             </div>
-            <JobItem />
-            <JobItem />
+            {jobs && jobs.map((job) => <JobItem key={job.id} job={job} />)}
           </div>
         </div>
       </div>
