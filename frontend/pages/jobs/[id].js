@@ -1,27 +1,42 @@
 import Layout from "../../components/layout/layout";
 import JobDetails from "../../components/job/JobDetails";
+import NotFound from "../../components/layout/NotFound";
 
 import axios from "axios";
 
-export default function JobDetailsPage({ job, candidates }) {
-  console.log(job, candidates);
+export default function JobDetailsPage({ job, candidates, error }) {
+  // console.log(job, candidates);
+  // console.log(error);
+
+  if (error?.includes("Not found")) return <NotFound />;
+
   return (
-    <Layout>
+    <Layout title={job.title}>
       <JobDetails job={job} candidates={candidates} />
     </Layout>
   );
 }
 
 export async function getServerSideProps({ params }) {
-  const res = await axios.get(`${process.env.API_URL}/api/jobs/${params.id}/`);
-  // console.log(res.data);
-  const job = res.data.job;
-  const candidates = res.data.candidates;
+  try {
+    const res = await axios.get(
+      `${process.env.API_URL}/api/jobs/${params.id}/`
+    );
+    // console.log(res.data);
+    const job = res.data.job;
+    const candidates = res.data.candidates;
 
-  return {
-    props: {
-      job,
-      candidates,
-    },
-  };
+    return {
+      props: {
+        job,
+        candidates,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        error: error.response.data.detail,
+      },
+    };
+  }
 }

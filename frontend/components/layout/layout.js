@@ -9,7 +9,7 @@ const Layout = ({ children, title = "Jobbee - Find your Job Now" }) => {
   return (
     <div>
       <Head>
-        <title>{title}</title>
+        <title>{title} - Jobbee</title>
       </Head>
       <Script
         strategy="beforeInteractive"
